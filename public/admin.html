@@ -1,10 +1,61 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-  <meta charset=utf-8>
-  <title>Yodlr Admin Page</title>
-</head>
-<body>
-  List user data here
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <title>Yodlr Admin Page</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <a class="p-2 ms-4 mt-4 d-inline-block" href="/index.html">Home</a>
+  <body>
+    <div class="container text-center mt-5">
+      <div id="results">
+        <div id="header">
+          <div class="row text-center">
+            <div class="col">ID</div>
+            <div class="col">Email</div>
+            <div class="col">First Name</div>
+            <div class="col">Last Name</div>
+            <div class="col">Status</div>
+          </div>
+        </div>
+      </div>
+      <a class="mt-4" href="/index.html">Home</a>
+    </div>
+    <script>
+      async function fetchUsers() {
+        const resultDiv = document.getElementById("results");
+        const headerDiv = document.getElementById("header");
+
+        try {
+          const res = await fetch("users/", {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+          });
+
+          const response = await res.json();
+
+          response.forEach((user) => {
+            const rowContainer = document.createElement("div");
+            rowContainer.setAttribute("class", "row mb-3 align-items-center");
+
+            Object.entries(user).forEach(([key, value]) => {
+              const col = document.createElement("div");
+              col.setAttribute("class", "col border p-2 py-3");
+              col.textContent = String(value);
+              rowContainer.appendChild(col);
+            });
+
+            resultDiv.appendChild(rowContainer);
+          });
+        } catch (error) {
+          console.log(error.message);
+        }
+      }
+      fetchUsers();
+      const fetchIntervalId = setInterval(fetchUsers, 100000);
+    </script>
+  </body>
 </html>
